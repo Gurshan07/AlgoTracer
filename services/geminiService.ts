@@ -1,48 +1,45 @@
-import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_PROMPT } from "../constants";
 import { AnalysisResult } from "../types";
 
+// Declare global puter object
+declare const puter: any;
+
 export const analyzeCode = async (code: string): Promise<AnalysisResult> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    throw new Error("API Key not found in environment variables");
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
-
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: [
-        {
-          role: "user",
-          parts: [
-            { text: code }
-          ]
-        }
+    // Puter AI Chat Interface
+    // We construct a prompt that includes the system instructions and the user code.
+    const response = await puter.ai.chat(
+      [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: code }
       ],
-      config: {
-        systemInstruction: SYSTEM_PROMPT,
-        responseMimeType: "application/json",
-        // Setting a high token limit to allow for long traces
-        maxOutputTokens: 8192, 
-      },
-    });
+      {
+        model: 'claude-3-5-sonnet', // Using a capable model available on Puter
+      }
+    );
 
-    const text = response.text;
+    // Puter response structure usually looks like { message: { content: "..." } }
+    const text = response?.message?.content;
+    
     if (!text) {
-      throw new Error("No response from Gemini");
+      console.error("Puter response:", response);
+      throw new Error("No response content from Puter AI");
     }
 
-    // Parse the JSON. Gemini 3 Flash is usually very good at adhering to JSON mode,
-    // but we add a safety trim just in case.
-    const cleanJson = text.trim();
-    const result: AnalysisResult = JSON.parse(cleanJson);
+    // Attempt to extract JSON from the response
+    // Sometimes models wrap JSON in ```json ... ``` code blocks
+    let jsonString = text.trim();
+    if (jsonString.startsWith('```json')) {
+      jsonString = jsonString.replace(/^```json/, '').replace(/```$/, '');
+    } else if (jsonString.startsWith('```')) {
+      jsonString = jsonString.replace(/^```/, '').replace(/```$/, '');
+    }
     
+    const result: AnalysisResult = JSON.parse(jsonString);
     return result;
 
   } catch (error) {
-    console.error("Gemini API Error:", error);
+    console.error("Puter AI Error:", error);
     throw error;
   }
 };

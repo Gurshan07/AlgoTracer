@@ -90,10 +90,10 @@ const App: React.FC = () => {
         </div>
         <div className="flex items-center gap-4">
            <button 
-             onClick={() => window.open('https://ai.google.dev/', '_blank')}
+             onClick={() => window.open('https://puter.com', '_blank')}
              className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
            >
-             Powered by Gemini
+             Powered by Puter.js
            </button>
         </div>
       </header>
@@ -217,7 +217,7 @@ const App: React.FC = () => {
             {loading && (
                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950/80 z-50">
                   <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-700 h-12 w-12 mb-4"></div>
-                  <p className="text-purple-400 animate-pulse font-mono">Simulating Logic via Gemini...</p>
+                  <p className="text-purple-400 animate-pulse font-mono">Simulating Logic via Puter AI...</p>
                </div>
             )}
 
