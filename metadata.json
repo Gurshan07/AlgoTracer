@@ -1,0 +1,5 @@
+{
+  "name": "AlgoTracer",
+  "description": "An AI-powered algorithm visualizer that traces code execution, visualizes data structures, and analyzes complexity step-by-step using Gemini.",
+  "requestFramePermissions": []
+}
