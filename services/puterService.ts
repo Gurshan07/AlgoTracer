@@ -7,14 +7,13 @@ declare const puter: any;
 export const analyzeCode = async (code: string): Promise<AnalysisResult> => {
   try {
     // Puter AI Chat Interface
-    // We construct a prompt that includes the system instructions and the user code.
     const response = await puter.ai.chat(
       [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: code }
       ],
       {
-        model: 'gpt-4o-mini', // Changed to gpt-4o-mini for better availability
+        model: 'gpt-4o-mini',
       }
     );
 
@@ -27,7 +26,6 @@ export const analyzeCode = async (code: string): Promise<AnalysisResult> => {
     }
 
     // Attempt to extract JSON from the response
-    // Sometimes models wrap JSON in ```json ... ``` code blocks
     let jsonString = text.trim();
     if (jsonString.startsWith('```json')) {
       jsonString = jsonString.replace(/^```json/, '').replace(/```$/, '');
