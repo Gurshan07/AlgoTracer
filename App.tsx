@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, RotateCcw, ChevronRight, ChevronLeft, Pause, Zap, Code2, Terminal } from 'lucide-react';
-import { analyzeCode } from './services/geminiService';
+import { analyzeCode } from './services/puterService';
 import { SAMPLE_CODE } from './constants';
 import { CodeInput } from './components/CodeInput';
 import { Visualizer } from './components/Visualizer';
