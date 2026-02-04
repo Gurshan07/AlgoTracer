@@ -14,7 +14,7 @@ export const analyzeCode = async (code: string): Promise<AnalysisResult> => {
         { role: 'user', content: code }
       ],
       {
-        model: 'claude-3-5-sonnet', // Using a capable model available on Puter
+        model: 'gpt-4o-mini', // Changed to gpt-4o-mini for better availability
       }
     );
 
@@ -38,8 +38,18 @@ export const analyzeCode = async (code: string): Promise<AnalysisResult> => {
     const result: AnalysisResult = JSON.parse(jsonString);
     return result;
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Puter AI Error:", error);
-    throw error;
+    
+    let errorMessage = "Failed to analyze code.";
+    if (error?.error) {
+        errorMessage = error.error; // Handle Puter specific error object
+    } else if (error?.message) {
+        errorMessage = error.message;
+    } else if (typeof error === 'string') {
+        errorMessage = error;
+    }
+
+    throw new Error(errorMessage);
   }
 };
